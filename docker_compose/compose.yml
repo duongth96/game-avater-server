@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: avatar_2x
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init.sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  game-server:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "12345:12345"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: avatar_2x
+      DB_USER: root
+      DB_PASSWORD: root
+    volumes:
+      - ../target/Avatar2D-1.0-SNAPSHOT.jar:/app/server.jar
+      - ../config.properties:/app/config.properties
+      - ../database.properties:/app/database.properties
+
+volumes:
+  db_data:

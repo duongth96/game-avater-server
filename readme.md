@@ -11,15 +11,18 @@
 
 # 3. Startup (khởi động server)
 
-> $ mvn clean install
-
-> $ cd docker_compose
-
-> $ docker-compose up -d
+```
+$ mvn clean install
+```
 
 ```
-Lưu ý: chạy 'docker-compose up -d' game-server lỗi! 😒😒. Đừng lo lắng, hãy chạy lại 'docker-compose up -d' phát nữa.
+$ cd docker_compose
 ```
+
+```
+$ docker-compose up -d 
+```
+> *Lưu ý: chạy 'docker-compose up -d' game-server lỗi! 😒😒. Đừng lo lắng, hãy chạy lại 'docker-compose up -d' phát nữa.*
 
 
 

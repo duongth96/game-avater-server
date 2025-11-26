@@ -2,9 +2,45 @@ const messageInput = document.getElementById('messageInput');
 const sendButton = document.getElementById('sendButton');
 const messagesDiv = document.getElementById('messages');
 const statusDiv = document.getElementById('status');
+const commandInput = document.getElementById('commandInput'); // Lấy reference đến select box
 
 const WEB_SERVER_PORT = 3000; // Cổng của web client server (Node.js backend)
 const ws = new WebSocket(`ws://localhost:${WEB_SERVER_PORT}`);
+
+// Function để fetch meta.json và populate select box
+async function fetchCommands() {
+    try {
+        const response = await fetch('./meta.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const metaData = await response.json();
+        const cmds = metaData.cmds;
+
+        // Xóa các option cũ (nếu có)
+        commandInput.innerHTML = '';
+
+        // Thêm option mặc định
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Select a command';
+        commandInput.appendChild(defaultOption);
+
+        // Thêm các command từ meta.json vào select box
+        cmds.forEach(cmd => {
+            const option = document.createElement('option');
+            option.value = cmd.value;
+            option.textContent = `${cmd.name} (${cmd.value})`;
+            commandInput.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching commands:', error);
+        appendMessage(`System: Error loading commands: ${error.message}`, 'system');
+    }
+}
+
+// Gọi fetchCommands khi trang tải xong
+document.addEventListener('DOMContentLoaded', fetchCommands);
 
 function appendMessage(message, type) {
     const messageElement = document.createElement('div');
@@ -53,12 +89,11 @@ messageInput.addEventListener('keypress', (e) => {
 });
 
 function sendMessage() {
-    const command = parseInt(commandInput.value.trim(), 10);
+    const command = parseInt(commandInput.value, 10); // Lấy giá trị từ select box
     const payload = messageInput.value.trim();
     if (!isNaN(command) && payload && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({ type: 'send_to_game', command: command, payload: payload }));
         appendMessage(`Client (Cmd: ${command}): ${payload}`, 'sent');
-        commandInput.value = '';
         messageInput.value = '';
     } else if (ws.readyState !== WebSocket.OPEN) {
         statusDiv.textContent = 'Not connected to backend. Please wait or refresh.';

@@ -465,6 +465,7 @@ public class Session implements ISession {
             enter();
         } else {
             this.login = false;
+            getAvatarService().serverDialog("Tên đăng nhập hoặc mật khẩu không đúng.");
         }
     }
 

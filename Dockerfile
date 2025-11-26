@@ -12,7 +12,7 @@ COPY config.properties /app/config.properties
 COPY database.properties /app/database.properties
 
 # Mở cổng mà máy chủ game sử dụng (ví dụ: 12345, bạn có thể cần điều chỉnh cổng này)
-EXPOSE 12345
+EXPOSE 19128
 
 # Lệnh để chạy ứng dụng máy chủ game
 CMD ["java", "-jar", "server.jar"]

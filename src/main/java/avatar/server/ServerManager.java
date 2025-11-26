@@ -229,17 +229,17 @@ public class ServerManager {
             ServerManager.numClients = 0;
             ServerManager.start = true;
             System.out.println("Start server Success !");
-            List<Integer> mapIds = List.of(11, 1, 7, 2, 3, 5, 8);
+            List<Integer> mapIds = Arrays.asList(11, 1, 7, 2, 3, 5, 8);
             for (int mapId : mapIds) {
                 Boss.spawnBossesForMap(mapId, 2);
             }
-            //call bot join map
-            List<Integer> mapIds1 = List.of(11,9,23,0);
+        //     // call bot join map
+        //     List<Integer> mapIds1 = Arrays.asList(11,9,23,0);
 
-            // bật bot người chơi
-//            for (int mapId : mapIds1) {
-//                botPlayer.getInstance().spawnBotesForMap(mapId);
-//            }
+        //    // bật bot người chơi
+        //    for (int mapId : mapIds1) {
+        //        botPlayer.getInstance().spawnBotesForMap(mapId);
+        //    }
 
             while (ServerManager.start) {
                 try {

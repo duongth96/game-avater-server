@@ -20,7 +20,7 @@ services:
       context: ..
       dockerfile: Dockerfile
     ports:
-      - "12345:12345"
+      - "12345:19128"
     depends_on:
       - db
     environment:
@@ -33,6 +33,31 @@ services:
       - ../target/Avatar2D-1.0-SNAPSHOT.jar:/app/server.jar
       - ../config.properties:/app/config.properties
       - ../database.properties:/app/database.properties
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+      ADMINER_DEFAULT_DATABASE: avatar_2x
+      ADMINER_DEFAULT_USER: root
+      ADMINER_DEFAULT_PASSWORD: root
+
+  web-client:
+    build:
+      context: ../tools/socket-client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - game-server
+    environment:
+      GAME_SERVER_HOST: game-server
+      GAME_SERVER_PORT: 19128
+      WEB_SERVER_PORT: 3000
 
 volumes:
   db_data:

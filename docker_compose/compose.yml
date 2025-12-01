@@ -20,7 +20,7 @@ services:
       context: ..
       dockerfile: Dockerfile
     ports:
-      - "12345:19128"
+      - "19128:19128"
     depends_on:
       - db
     environment:
@@ -30,9 +30,8 @@ services:
       DB_USER: root
       DB_PASSWORD: root
     volumes:
-      - ../target/Avatar2D-1.0-SNAPSHOT.jar:/app/server.jar
-      - ../config.properties:/app/config.properties
-      - ../database.properties:/app/database.properties
+      - ./configs/game-server/config.properties:/app/config.properties
+      - ./configs/game-server/database.properties:/app/database.properties
 
   adminer:
     image: adminer:latest
